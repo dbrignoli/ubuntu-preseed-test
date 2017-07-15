@@ -1,0 +1,9 @@
+[Unit]
+Description=TCS Connect
+Requires=sshd.service
+
+[Service]
+Type=simple
+ExecStart=/home/tsm/tcs-connect/start.sh
+Restart=always
+RestartSec=3
