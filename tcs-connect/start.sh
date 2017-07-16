@@ -30,7 +30,7 @@ user=tcs
 host=tcs.local
 
 # build known_hosts file
-echo "${host} " > tcs_host_key
+echo -n "${host} " > tcs_host_key
 cat tcs_host_rsa.pub | cut -d' ' -s -f1,2 >> tcs_host_key
 
 # Connect to TCS to deposit our public key
