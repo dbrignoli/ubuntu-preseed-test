@@ -19,6 +19,7 @@ update ${TCS_CONNECT_URL_PREFIX}/tcs-connect/tcs_restricted_rsa tcs_restricted_r
 update ${TCS_CONNECT_URL_PREFIX}/tcs-connect/tcs_host_rsa.pub tcs_host_rsa.pub
 
 # check for updates to this script
+rm -f ${THIS_SCRIPT_PATH}.md5
 md5sum ${THIS_SCRIPT_PATH} > ${THIS_SCRIPT_PATH}.md5
 update ${TCS_CONNECT_URL_PREFIX}/tcs-connect/start.sh ${THIS_SCRIPT_PATH}
 chmod a+x ${THIS_SCRIPT_PATH}
@@ -30,7 +31,7 @@ host=tcs.local
 
 # build known_hosts file
 echo "${host} " > tcs_host_key
-cat tcs_restricted_rsa.pub | cut -d' ' -s -f1,2 >> tcs_host_key
+cat tcs_host_rsa.pub | cut -d' ' -s -f1,2 >> tcs_host_key
 
 # Connect to TCS to deposit our public key
 # TCS restricts access to receiveing SSH public keys
