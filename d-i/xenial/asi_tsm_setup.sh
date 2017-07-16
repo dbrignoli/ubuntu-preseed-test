@@ -4,6 +4,8 @@
 echo "\nPasswordAuthentication no\n" >> /etc/ssh/sshd_config
 # Download and setup latest version of tcs-connect bootstrap script
 mkdir -p /home/tsm/tcs-connect
+chown tsm.tsm /home/tsm/tcs-connect
+chmod ug+rw /home/tsm/tcs-connect
 wget -O /home/tsm/tcs-connect/start.sh https://raw.githubusercontent.com/dbrignoli/ubuntu-preseed-test/master/tcs-connect/start.sh
 chown tsm.tsm /home/tsm/tcs-connect/start.sh
 chmod a+x /home/tsm/tcs-connect/start.sh
