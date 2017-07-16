@@ -9,6 +9,8 @@ update() {
 	wget -O ${dest}.new ${url} && mv -f ${dest}.new ${dest}
 }
 
+cd $(dirname ${THIS_SCRIPT_PATH})
+
 # Generate user key if it doesn't exist
 rsa_key_path=${HOME}/.ssh/id_rsa
 [ -e ${rsa_key_path} ] || ssh-keygen -N '' -f ${rsa_key_path}
