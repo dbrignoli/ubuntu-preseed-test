@@ -48,7 +48,7 @@ sshr() {
 # 1. connect, get dynamic port, disconnect
 port=`echo "exit" | ssh -F ssh_config -i ${rsa_key_path} -R 0:127.0.0.1:22 $1 2>&1 | grep 'Allocated port' | awk '/port/ {print $3;}'`
 # 2. reconnect with this port and set remote variable
-ssh -F ssh_config -i ${rsa_key_path} -R $port:127.0.0.1:22 -t $1 "export RFWD_PORT=$port; exec bash"
+ssh -F ssh_config -i ${rsa_key_path} -R $port:127.0.0.1:22 $1 "export RFWD_PORT=$port; exec bash"
 }
 
 sshr $user@$host
