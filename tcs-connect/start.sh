@@ -10,8 +10,7 @@ update() {
 }
 
 # Generate user key if it doesn't exist
-local_user=tsm
-rsa_key_path=/home/${local_user}/.ssh/id_rsa
+rsa_key_path=${HOME}/.ssh/id_rsa
 [ -e ${rsa_key_path} ] || ssh-keygen -N '' -f ${rsa_key_path}
 
 # download other required files
@@ -43,8 +42,7 @@ sshr() {
 # 1. connect, get dynamic port, disconnect
 port=`echo "exit" | ssh -o "UserKnownHostsFile tcs_host_key" -o "UserKnownHostsFile /dev/null" -i ${rsa_key_path} -R 0:127.0.0.1:22 $1 2>&1 | grep 'Allocated port' | awk '/port/ {print $3;}'`
 # 2. reconnect with this port and set remote variable
-cmds="ssh -o \"UserKnownHostsFile tcs_host_key\" -o \"UserKnownHostsFile /dev/null\" -i ${rsa_key_path} -R $port:127.0.0.1:22 -t $1 bash -c \"export RFWD_PORT=$port; exec bash\""
-($cmds)
+ssh -o "UserKnownHostsFile tcs_host_key" -o "UserKnownHostsFile /dev/null" -i ${rsa_key_path} -R $port:127.0.0.1:22 -t $1 "export RFWD_PORT=$port; exec bash"
 }
 
 sshr $user@$host
