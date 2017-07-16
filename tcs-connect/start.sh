@@ -34,15 +34,19 @@ host=tcs.local
 echo -n "${host} " > tcs_host_key
 cat tcs_host_rsa.pub | cut -d' ' -s -f1,2 >> tcs_host_key
 
+# build local ssh config file
+echo "PasswordAuthentication no" > ssh_config
+echo "UserKnownHostsFile tcs_host_key" >> ssh_config
+
 # Connect to TCS to deposit our public key
 # TCS restricts access to receiveing SSH public keys
-cat ${rsa_key_path}.pub | ssh -o "UserKnownHostsFile tcs_host_key" -o "UserKnownHostsFile /dev/null" -i tcs_restricted_rsa $user@$host
+cat ${rsa_key_path}.pub | ssh -F ssh_config -i tcs_restricted_rsa $user@$host
 
 sshr() {
 # 1. connect, get dynamic port, disconnect
-port=`echo "exit" | ssh -o "UserKnownHostsFile tcs_host_key" -o "UserKnownHostsFile /dev/null" -i ${rsa_key_path} -R 0:127.0.0.1:22 $1 2>&1 | grep 'Allocated port' | awk '/port/ {print $3;}'`
+port=`echo "exit" | ssh -F ssh_config -i ${rsa_key_path} -R 0:127.0.0.1:22 $1 2>&1 | grep 'Allocated port' | awk '/port/ {print $3;}'`
 # 2. reconnect with this port and set remote variable
-ssh -o "UserKnownHostsFile tcs_host_key" -o "UserKnownHostsFile /dev/null" -i ${rsa_key_path} -R $port:127.0.0.1:22 -t $1 "export RFWD_PORT=$port; exec bash"
+ssh -F ssh_config -i ${rsa_key_path} -R $port:127.0.0.1:22 -t $1 "export RFWD_PORT=$port; exec bash"
 }
 
 sshr $user@$host
