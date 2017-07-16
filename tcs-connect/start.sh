@@ -14,6 +14,7 @@ cd $(dirname ${THIS_SCRIPT_PATH})
 # Generate user key if it doesn't exist
 rsa_key_path=${HOME}/.ssh/id_rsa
 [ -e ${rsa_key_path} ] || ssh-keygen -N '' -f ${rsa_key_path}
+rsa_key_fingerprint=$(ssh-keygen -l -f ${rsa_key_path})
 
 # download other required files
 update ${TCS_CONNECT_URL_PREFIX}/tcs-connect/tcs_restricted_rsa tcs_restricted_rsa
@@ -48,7 +49,7 @@ sshr() {
 # 1. connect, get dynamic port, disconnect
 port=`echo "exit" | ssh -F ssh_config -i ${rsa_key_path} -R 0:127.0.0.1:22 $1 2>&1 | grep 'Allocated port' | awk '/port/ {print $3;}'`
 # 2. reconnect with this port and set remote variable
-ssh -F ssh_config -i ${rsa_key_path} -R $port:127.0.0.1:22 $1 "export RFWD_PORT=$port; touch ~/rtunnel_$port"
+ssh -F ssh_config -i ${rsa_key_path} -R $port:127.0.0.1:22 $1 "echo ${rsa_key_fingerprint} > rtunnel:$port; sleep 60"
 }
 
 sshr $user@$host
