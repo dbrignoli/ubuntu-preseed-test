@@ -8,7 +8,7 @@ TCS_HOSTNAME=asi-tcs.ddns.net
 download-update() {
 	url=${TCS_CONNECT_URL_PREFIX}/$(basename $1)
 	dest=$1
-	wget -N -O ${dest}.new ${url} && mv -f ${dest}.new ${dest}
+	wget -O ${dest}.new ${url} && mv -f ${dest}.new ${dest}
 }
 
 check-update-and-restart() {
