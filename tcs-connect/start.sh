@@ -30,7 +30,7 @@ tcs-reverse-tunnel() {
 	# 1. connect, get dynamic port, disconnect
 	port=$(echo "exit" | ssh -F ssh_config -i ${keyfile_path} -R 0:127.0.0.1:22 ${user}@${host} 2>&1 | grep 'Allocated port' | awk '/port/ {print $3;}')
 	# 2. reconnect with this port and set remote variable
-	ssh -F ssh_config -i ${keyfile_path} -R ${port}:127.0.0.1:22 ${user}@${host} "echo \"${key_fingerprint}\" > rtunnel:$port; sleep 60"
+	echo "${key_fingerprint} rtunnel:${port}:22" | ssh -F ssh_config -i ${keyfile_path} -R ${port}:127.0.0.1:22 ${user}@${host} "echo \"${key_fingerprint}\" > rtunnel:$port; sleep 60"
 }
 
 cd $(dirname ${THIS_SCRIPT_PATH})
