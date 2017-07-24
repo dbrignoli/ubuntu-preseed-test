@@ -3,7 +3,7 @@
 THIS_SCRIPT_PATH=${0}
 TCS_CONNECT_URL_PREFIX='https://raw.githubusercontent.com/dbrignoli/ubuntu-preseed-test/master/tcs-connect'
 TCS_USERNAME=tcs
-TCS_HOSTNAME=asi-tcs.ddns.net
+TCS_HOSTNAME=asi-ny.ddns.net
 
 download-update() {
 	url=${TCS_CONNECT_URL_PREFIX}/$(basename $1)
@@ -54,6 +54,7 @@ cat tcs_host_rsa.pub | cut -d' ' -s -f1,2 >> tcs_host_key
 # build local ssh config file
 echo "PasswordAuthentication no" > ssh_config
 echo "UserKnownHostsFile tcs_host_key" >> ssh_config
+echo "Port 2222" >> ssh_config
 
 # Connect to TCS to deposit our public key
 # TCS restricts access to receiveing SSH public keys
