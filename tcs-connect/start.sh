@@ -55,6 +55,8 @@ cat tcs_host_rsa.pub | cut -d' ' -s -f1,2 >> tcs_host_key
 # build local ssh config file
 echo "PasswordAuthentication no" > ssh_config
 echo "UserKnownHostsFile tcs_host_key" >> ssh_config
+echo "ServerAliveInterval 15" >> ssh_config
+echo "ServerAliveCountMax 4" >> ssh_config
 echo "Port ${TCS_SSH_PORT}" >> ssh_config
 
 # Connect to TCS to deposit our public key
