@@ -29,7 +29,7 @@ tcs-reverse-tunnel() {
 	keyfile_path=$3
 	key_fingerprint=$(ssh-keygen -l -f ${keyfile_path})
 	# 1. connect, get dynamic port, disconnect
-	port=$(echo "exit" | ssh -F ssh_config -i ${keyfile_path} -R 0:127.0.0.1:22 ${user}@${host} 2>&1 | grep 'Allocated port' | awk '/port/ {print $3;}')
+	port=$(echo "exit" | ssh -F ssh_config -i ${keyfile_path} -R 0:127.0.0.1:22 ${user}@${host} exit 2>&1 | grep 'Allocated port' | awk '/port/ {print $3;}')
 	# 2. reconnect with this port and set remote variable
 	echo "${key_fingerprint} rtunnel:${port}:22" | ssh -F ssh_config -i ${keyfile_path} -R ${port}:127.0.0.1:22 ${user}@${host} "echo \"${key_fingerprint}\" > rtunnel:$port; sleep 60"
 }
